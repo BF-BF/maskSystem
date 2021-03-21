@@ -6,27 +6,30 @@ from common import redis_con
 
 r = redis_con.Redis()
 
-# 建立用户画像：用户搜索过的面膜所对应的主题词的次数
-def createUserProfile(username):
-    # user_saw_mask: [("yiyezi", 8),("yunifang", 6),...]
+# 获取用户搜索的面膜
+def user_saw_mask(username):
     user_saw_masks = []
     mask_name = get_common_data.get_all_mask_name()
     for mask in mask_name:
         if r.zscore("click_num_"+username, mask):
             user_saw_masks.append((mask, r.zscore("click_num_"+username, mask)))
+    return user_saw_masks
 
-    all_topics = []
-    for mask in mask_name:
-        all_topics += get_common_data.all_topics(mask)
+# 建立用户画像：用户搜索过的面膜所对应的主题词的次数
+def createUserProfile(username):
+    # user_saw_mask: [("yiyezi", 8),("yunifang", 6),...]
+    # 用户搜索过的面膜
+    user_saw_masks = user_saw_mask(username)
+
     # all_topics: ["补水", "服帖", "保湿", ...]
-    all_topics = list(set(all_topics))
+    all_topics = get_all_topic()
 
     # all_topic_score: [[8, 0, 8, ...],[2, 2, ...],[], ...]
     all_topic_score = []
     for x in range(len(user_saw_masks)):
         topic_score = []
         for j in range(len(all_topics)):
-            if all_topics[j] in get_common_data.all_topics(user_saw_masks[x][0]):
+            if all_topics[j] in list(set(get_common_data.all_topics(user_saw_masks[x][0]))):
                 topic_score.append(user_saw_masks[x][1])
             else:
                 topic_score.append(0)
@@ -43,6 +46,7 @@ def createUserProfile(username):
 
     return aver_score_array
 
+# 获取所有备选面膜的评论
 def get_all_can_mask_com():
     filename = ['E:\\backend\\recommend\\data\\comments\\sk2',
                 'E:\\backend\\recommend\\data\\comments\\hanshu',
@@ -62,6 +66,7 @@ def get_all_can_mask_com():
         all_commments.append(comments)
     return all_commments
 
+# 获取所有备选面膜的主题词
 def get_candidate_mask_topic():
     all_data = getAllData.getAll()
     stopwords = all_data.get_stopwords()
@@ -78,15 +83,18 @@ def get_candidate_mask_topic():
 
     return all_mask_candidate_topic
 
+# 获取所有已存在面膜的主题词（去重）
 def get_all_topic():
     mask_names = get_common_data.get_all_mask_name()
 
     all_topics = []
     for mask in mask_names:
-        all_topics += get_common_data.all_topics(mask)
+        mask_topic = get_common_data.all_topics(mask)
+        all_topics += mask_topic
     all_topics = list(set(all_topics))
     return all_topics
 
+# 构建备选面膜集面膜画像
 def createMaskProfile():
     all_topics = get_all_topic()
     all_mask_candidate_topic = get_candidate_mask_topic()
@@ -94,16 +102,17 @@ def createMaskProfile():
     all_can_topic_01 = []
     for can_topic in all_mask_candidate_topic:
         can_topic_01 = []
-        for x in range(len(can_topic)):
-            if can_topic[x] in all_topics:
-                can_topic_01[x] = 1
+        for x in range(len(all_topics)):
+            if all_topics[x] in can_topic:
+                can_topic_01.append(1)
             else:
-                can_topic_01 = 0
+                can_topic_01.append(0)
         all_can_topic_01.append(can_topic_01)
     all_can_topic_01 = np.array(all_can_topic_01)
 
     return all_can_topic_01
 
+# 计算备选面膜画像和用户画像的相似度
 def cos_sim(user, can_topic_01):
     user_norm = np.linalg.norm(user)
     can_topic_01_norm = np.linalg.norm(can_topic_01)

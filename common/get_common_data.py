@@ -20,23 +20,29 @@ def pinyin(word):
 # 返回面膜所有评论
 def all_com(mask_name):
     comments = r.lrange(pinyin(mask_name).lower() + "_comments", 0, -1)
+    com = []
     for x in range(len(comments)):
         comments[x] = comments[x].decode()
-    return comments
+        com.append(comments[x].split(',\n')[0].replace('"', ''))
+    return com
 
 # 返回好评
 def all_pos_com(mask_name):
     pos_comments = r.lrange(pinyin(mask_name).lower() + "_pos_comments", 0, -1)
+    pos_com = []
     for x in range(len(pos_comments)):
         pos_comments[x] = pos_comments[x].decode()
-    return pos_comments
+        pos_com.append(pos_comments[x].split(',\n')[0].replace('"', ''))
+    return pos_com
 
 # 返回差评
 def all_nav_com(mask_name):
     nav_comments = r.lrange(pinyin(mask_name).lower() + "_nav_comments", 0, -1)
+    nav_com = []
     for x in range(len(nav_comments)):
         nav_comments[x] = nav_comments[x].decode()
-    return nav_comments
+        nav_com.append(nav_comments[x].split(',\n')[0].replace('"', ''))
+    return nav_com
 
 # 返回词频
 def all_word_tfs(mask_name):
@@ -44,17 +50,19 @@ def all_word_tfs(mask_name):
     tfs = r.hvals(pinyin(mask_name).lower() + "_word_tf")
     word_tf = []
     for x in range(len(words)):
-        words[x].decode()
-        tfs[x].decode()
+        words[x] = words[x].decode()
+        tfs[x] = tfs[x].decode()
         word_tf.append((words[x], tfs[x]))
     return word_tf
 
 # 返回主题词
 def all_topics(mask_name):
     topics = r.lrange(pinyin(mask_name).lower() + "_theme", 0, -1)
+    all_topics = []
     for x in range(len(topics)):
         topics[x] = topics[x].decode()
-    return topics
+        all_topics += topics[x].split()
+    return all_topics
 
 # 返回二元组
 def all_bigrams(mask_name):
@@ -66,7 +74,7 @@ def all_bigrams(mask_name):
 
 # 返回词云
 def all_wc(mask_name):
-    wc_name = r.lrange(pinyin(mask_name).lower() + "wc", 0, -1)
+    wc_name = r.lrange(pinyin(mask_name).lower() + "_wc", 0, -1)
     for x in range(len(wc_name)):
         wc_name[x] = wc_name[x].decode()
     return wc_name
@@ -84,4 +92,15 @@ def all_username():
     for x in range(len(username)):
         username[x] = username[x].decode()
     return username
+
+# 返回备选面膜urls
+def all_urls():
+    can_mask_names = r.hkeys("mask_urls")
+    mask_urls = r.hvals("mask_urls")
+    name_urls = dict()
+    for x in range(len(can_mask_names)):
+        can_mask_names[x] = can_mask_names[x].decode()
+        mask_urls[x] = mask_urls[x].decode()
+        name_urls[can_mask_names[x]] = mask_urls[x]
+    return name_urls
 

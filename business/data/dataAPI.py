@@ -71,12 +71,12 @@ def insert_wc_name():
     for x in range(len(goods_name)):
         r.rpush(goods_name[x] + "_wc", goods_name[x] + "wordCloud" + str(x) + ".png")
 
-# 天猫商城url
+# 备选面膜集天猫商城url
 def insert_urls():
-    all_mask_name = all_data.get_all_mask_name()
+    can_mask_name = ['sk2', 'hanshu', 'mg', 'panshi', 'wanzixx', 'xiaobding', 'youtlan', 'bolaiya', 'farmacy', 'niuxzmi']
     all_urls = all_data.get_all_urls()
-    for x in range(len(all_mask_name)):
-        r.hset("mask_urls", all_mask_name[x], all_urls[x])
+    for x in range(len(can_mask_name)):
+        r.hset("mask_urls", can_mask_name[x], all_urls[x])
 
 # 用户搜索面膜次数
 def insert_click_num():

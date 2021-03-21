@@ -5,7 +5,7 @@ from searchCompare import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('mask_search', views.mask_search),
-    path('keyword_search', views.keywords_search),
+    path('maskSearch', views.mask_search),
+    path('keywordSearch', views.keywords_search),
     path('compare', views.compare),
 ]
