@@ -75,7 +75,7 @@ def keywords_search(request):
         keywordResultDict["KeywordResult"] = all_kw_com_result
         return JsonResponse(keywordResultDict, json_dumps_params={'ensure_ascii': False})
     else:
-        return JsonResponse({'rCode': 1, 'msg': '搜索结果为空'}, json_dumps_params={'ensure_ascii': False})
+        return JsonResponse({'rCode': 1, 'msg': '搜索结果为空，暂无该关键词相关的信息'}, json_dumps_params={'ensure_ascii': False})
 
 # 商品比较
 def compare(request):
@@ -85,7 +85,7 @@ def compare(request):
     # mask2 = 'yunifang'
 
     if pinyin(mask1).lower() not in mask_names or pinyin(mask2).lower() not in mask_names:
-        return JsonResponse({'rCode': 1, 'msg': '比较结果为空'}, json_dumps_params={'ensure_ascii': False})
+        return JsonResponse({'rCode': 1, 'msg': '暂无该两款面膜的比较信息'}, json_dumps_params={'ensure_ascii': False})
     else:
         MaskDict = dict()
         # 返回相同主题词所在的评论
