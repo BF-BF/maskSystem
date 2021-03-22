@@ -108,7 +108,7 @@ def createMaskProfile():
             else:
                 can_topic_01.append(0)
         all_can_topic_01.append(can_topic_01)
-    all_can_topic_01 = np.array(all_can_topic_01)
+    # all_can_topic_01 = np.array(all_can_topic_01)
 
     return all_can_topic_01
 

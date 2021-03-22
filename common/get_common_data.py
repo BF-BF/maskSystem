@@ -104,3 +104,20 @@ def all_urls():
         name_urls[can_mask_names[x]] = mask_urls[x]
     return name_urls
 
+# 返回备选面膜01列表
+def all_can_mask_01():
+    can_mask_names = r.hkeys("can_mask_01")
+    mask_01 = r.hvals("can_mask_01")
+    mask_01_dict = dict()
+    for x in range(len(can_mask_names)):
+        can_mask_names[x] = can_mask_names[x].decode()
+        mask_01[x] = mask_01[x].decode()
+        list_mask_01 = list(mask_01[x])
+        final_mask_01 = []
+        for text in list_mask_01:
+            if text == '1' or text == '0':
+                final_mask_01.append(int(text))
+        mask_01_dict[can_mask_names[x]] = final_mask_01
+    return mask_01_dict
+
+# print(all_can_mask_01())

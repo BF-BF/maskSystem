@@ -32,9 +32,9 @@ from business.data import dataAPI
 # dataAPI.insert_wc_name()
 # print("商品词云图片名称入库成功")
 #
-# 备选面膜天猫商城的url入库
-dataAPI.insert_urls()
-print("商品对应天猫商城的url入库成功")
+# # 备选面膜天猫商城的url入库
+# dataAPI.insert_urls()
+# print("商品对应天猫商城的url入库成功")
 #
 # # 用户
 # dataAPI.insert_user()
@@ -43,3 +43,7 @@ print("商品对应天猫商城的url入库成功")
 # # 搜索面膜次数
 # dataAPI.insert_click_num()
 # print("搜索面膜次数入库成功")
+#
+# # 备选面膜01列表入库
+# dataAPI.insert_can_mask()
+# print("备选面膜01列表入库成功")

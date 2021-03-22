@@ -1,6 +1,7 @@
 from common import redis_con
 from business.data import getAllData
 from common import get_common_data
+from recommend.business import get_train_data
 
 # 连接数据库
 r = redis_con.Redis()
@@ -10,9 +11,11 @@ def insert_user():
     # r.hset("user", "sukki", "123456")
     r.hset("user", "leeyona", "12345678")
 
-# 商品
+# 面膜
 goods_name = ['yunifang', 'yiyezi', 'zirantang', 'queling', 'dijiating', 'olaiya', 'meidihuier', 'chunyu', 'fuerjia', 'jm',
               'keyanshi', 'gelai', 'fuleishi', 'swisse', 'lanzhi']
+# 备选面膜
+can_mask_name = ['sk2', 'hanshu', 'mg', 'panshi', 'wanzixx', 'xiaobding', 'youtlan', 'bolaiya', 'farmacy', 'niuxzmi']
 
 # 商品所有信息
 all_data = getAllData.getAll()
@@ -85,3 +88,9 @@ def insert_click_num():
     for name in username:
         for mask in mask_names:
             r.zadd("click_num_" + name, {mask: 0})
+
+# 备选面膜主题词01列表
+def insert_can_mask():
+    all_can_topic_01 = get_train_data.createMaskProfile()
+    for x in range(len(all_can_topic_01)):
+        r.hset("can_mask_01", can_mask_name[x], str(all_can_topic_01[x]))

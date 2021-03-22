@@ -1,8 +1,9 @@
 from django.http import JsonResponse
 from recommend.business import get_train_data
 from common import get_common_data
+import numpy as np
 
-can_mask_name = ['sk2', 'hanshu', 'mg', 'panshi', 'wanzixx', 'xiaobding', 'youtlan', 'bolaiya', 'farmacy', 'niuxzmi']
+# can_mask_name = ['sk2', 'hanshu', 'mg', 'panshi', 'wanzixx', 'xiaobding', 'youtlan', 'bolaiya', 'farmacy', 'niuxzmi']
 
 # 商品推荐
 def recommend(request):
@@ -11,12 +12,23 @@ def recommend(request):
     name_urls = get_common_data.all_urls()
     recommend_name_urls = dict()
 
-    username = request.GET["username"]
+    # username = request.GET["username"]
+    username = 'sukki'
     if len(get_train_data.user_saw_mask(username)):
         # 用户画像
         user_profile = get_train_data.createUserProfile(username)
         # 备选面膜画像
-        all_can_mask_profile = get_train_data.createMaskProfile()
+        mask_01_dict = get_common_data.all_can_mask_01()
+        can_mask_name = list(mask_01_dict.keys())
+        all_can_mask = list(mask_01_dict.values())
+        print(can_mask_name)
+        print(all_can_mask)
+        all_can_mask_profile = []
+        for can_mask in all_can_mask:
+            all_can_mask_profile.append(can_mask)
+        all_can_mask_profile = np.array(all_can_mask_profile)
+        # print(all_can_mask_profile)
+        # all_can_mask_profile = get_train_data.createMaskProfile()
 
         # 计算备选面膜画像和用户画像的余弦相似度
         can_cos = []
@@ -53,3 +65,5 @@ def recommend(request):
 
         # print(default_recommend)
         return JsonResponse(default_recommend)
+
+# recommend()

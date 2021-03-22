@@ -1,13 +1,13 @@
-# from searchCompare import views
+# from common import redis_con
 #
-# views.compare()
-
-# from common import get_common_data
+# # 连接数据库
+# r = redis_con.Redis()
 #
-# print(get_common_data.all_com('yiyezi'))
+# # r.hset("test", "candidate", "[1, 2, 3]")
+#
+# print(list(r.hvals("test")[0].decode()))
 
-
-
-
-
+#
+# myditct = {'1':1, '2':2}
+# print(list(myditct.keys()))
 
