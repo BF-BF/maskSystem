@@ -21,8 +21,8 @@ def signin(request):
 
 # 注册
 def register(request):
-    username = request.POST['username']
-    password = request.POST['password']
+    username = request.GET['username']
+    password = request.GET['password']
     if bytes(username, encoding='utf8') in users:
         return JsonResponse({"rCode": 1, "msg": "username had exist"})
     else:
