@@ -12,8 +12,8 @@ def recommend(request):
     name_urls = get_common_data.all_urls()
     recommend_name_urls = dict()
 
-    # username = request.GET["username"]
-    username = 'sukki'
+    username = request.GET["username"]
+#     username = 'sukki'
     if len(get_train_data.user_saw_mask(username)):
         # 用户画像
         user_profile = get_train_data.createUserProfile(username)
