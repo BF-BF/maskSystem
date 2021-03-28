@@ -34,7 +34,7 @@ def mask_search(request):
         maskResultDict["PosComments"] = pos_comments
 
         # 返回20条差评
-        nav_comments = get_common_data.all_nav_com(mask_name)
+        nav_comments = get_common_data.all_nav_com(mask_name)[0:20]
         maskResultDict["NavComments"] = nav_comments
 
         # 返回词频
