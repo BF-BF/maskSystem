@@ -22,11 +22,13 @@ def mask_search(request):
     username = request.GET["username"]
     # mask_name = 'yiyezi'
     # username = 'sukki'
+    all_username = r.hkeys("user")
     if pinyin(mask_name).lower() not in mask_names:
         return JsonResponse({'rCode': 1, 'msg': '搜索结果为空，暂无该面膜品牌的信息'}, json_dumps_params={'ensure_ascii': False})
     else:
         # 面膜搜索次数+1
-        r.zincrby("click_num_" + username, 1, pinyin(mask_name).lower())
+        if bytes(username) in all_username:
+            r.zincrby("click_num_" + username, 1, pinyin(mask_name).lower())
 
         maskResultDict = dict()
         # 返回20条好评

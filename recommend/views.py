@@ -13,16 +13,17 @@ def recommend(request):
     recommend_name_urls = dict()
 
     username = request.GET["username"]
-#     username = 'sukki'
+    # username = 'sukki'
     if len(get_train_data.user_saw_mask(username)):
         # 用户画像
         user_profile = get_train_data.createUserProfile(username)
+        # print(user_profile)
         # 备选面膜画像
         mask_01_dict = get_common_data.all_can_mask_01()
         can_mask_name = list(mask_01_dict.keys())
         all_can_mask = list(mask_01_dict.values())
-        print(can_mask_name)
-        print(all_can_mask)
+        # print(can_mask_name)
+        # print(all_can_mask)
         all_can_mask_profile = []
         for can_mask in all_can_mask:
             all_can_mask_profile.append(can_mask)
