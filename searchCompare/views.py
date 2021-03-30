@@ -27,7 +27,7 @@ def mask_search(request):
         return JsonResponse({'rCode': 1, 'msg': '搜索结果为空，暂无该面膜品牌的信息'}, json_dumps_params={'ensure_ascii': False})
     else:
         # 面膜搜索次数+1
-        if bytes(username) in all_username:
+        if bytes(username,encoding = "utf8") in all_username:
             r.zincrby("click_num_" + username, 1, pinyin(mask_name).lower())
 
         maskResultDict = dict()
